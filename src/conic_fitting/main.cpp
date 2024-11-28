@@ -8,18 +8,16 @@
 #include "random.hpp"
 #include "conic.hpp"
 
-
-//---------------- permettre selection des points de controle ----------------
-
 void test_conic_generation(const double& thickness) {
     try {
         // points de contrôle
         std::vector<Eigen::Vector3d> points = {
-            {1.0, 2.0, 0.0},
+            {1.0, 2.0, 1.0},
             {2.0, 3.0, 1.0},
             {3.0, 1.0, 1.0},
             {4.0, 4.0, 1.0},
-            {5.0, 2.0, 0.0} 
+            {5.0, 2.0, 1.0},
+            {6.0, 12.0, 1.0}
         };
         Conic conic_0(points);
         conic_0.display_props();
@@ -72,15 +70,15 @@ int main()
     // faisceau exact trop précis donc on ajoute approximation pour affichage
     double visual_thickness(0.01);
 
-    // test_conic_generation (visual_thickness);
+    test_conic_generation (visual_thickness);
 
-    Conic conic_1, conic_2;
-    conic_1.generate_random_control_points(100.0);
-    export_conic(std::string{"conic1"}, visual_thickness, conic_1.get_coef());
-    conic_2.generate_random_control_points(100.0);
-    export_conic(std::string{"conic2"}, visual_thickness, conic_2.get_coef());
+    // Conic conic_1, conic_2;
+    // conic_1.generate_random_control_points(100.0);
+    // export_conic(std::string{"conic_1"}, visual_thickness, conic_1.get_coef());
+    // conic_2.generate_random_control_points(100.0);
+    // export_conic(std::string{"conic_2"}, visual_thickness, conic_2.get_coef());
 
-    faisceau_conic(visual_thickness, conic_1, conic_2, 20);
+    // faisceau_conic(visual_thickness, conic_1, conic_2, 20);
 
     return 0;
 }

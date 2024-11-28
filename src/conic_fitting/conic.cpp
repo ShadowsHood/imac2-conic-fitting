@@ -27,7 +27,7 @@ void export_conic(const std::string& name, const double& thickness, const Eigen:
     double const center_x{image.width()/2.0};
     double const center_y{image.height()/2.0};
 
-    double scale = 100; //zoom
+    double scale = 75; //zoom
 
     for(int x=0; x<image.width(); x++){
         for(int y=0; y<image.height(); y++){
@@ -52,8 +52,8 @@ Conic::Conic():
     {};
 
 Conic::Conic(const std::vector<Eigen::Vector3d>& control_points) {
-        if (control_points.size() != 5) throw std::invalid_argument("5 control point required");
-        m_matrix=Eigen::MatrixXd::Zero(5,6);
+        if (control_points.size() < 5) throw std::invalid_argument("5 control point required at least");
+        m_matrix=Eigen::MatrixXd::Zero(control_points.size(),6);
         m_coef=Eigen::VectorXd(6);
         m_control_points = control_points;
         this->update_props();
