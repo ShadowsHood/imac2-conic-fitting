@@ -8,9 +8,10 @@
 #include "random.hpp"
 #include "conic.hpp"
 
-int main() 
-{
 
+//---------------- permettre selection des points de controle ----------------
+
+void test_conic_generation() {
     try {
         // points de contrôle
         std::vector<Eigen::Vector3d> points = {
@@ -18,23 +19,42 @@ int main()
             {2.0, 3.0, 1.0},
             {3.0, 1.0, 1.0},
             {4.0, 4.0, 1.0},
-            {5.0, 2.0, 1.0} 
+            {5.0, 2.0, 0.0} 
         };
         Conic conic1(points);
-
-        std::cout << "conic1 coeff : " << conic1.get_coef() << std::endl;
-        std::cout << "conic1 matrix size : " << conic1.get_matrix().rows() << " x " << conic1.get_matrix().cols() << std::endl;
-        std::cout << "conic1 matrix :\n" << conic1.get_matrix() << std::endl << std::endl;
+        conic1.display_props();
+        // conic1.display_control_points();
 
     } catch (const std::exception& e) {
         std::cerr << "Erreur : " << e.what() << std::endl;
     }
+}
 
+int main() 
+{
+    // test_conic_generation ();
+    // generation conic
+    Conic conic_1, conic_2;
+    conic_1.generate_random_control_points(1000.0);
+    conic_2.generate_random_control_points(1000.0);
 
+    // création image
+    sil::Image image{1000/*width*/, 1000/*height*/};
+    float centreX {image.width()/2.0f};
+    float centreY {image.height()/2.0f};
 
+    // faisceau de conic
+    Conic conic_f;
+    double t = 1.2; // compris entre 0 et pi
+    // ATTENTION pas de control_points ni de matrix d'eq, on se sert uniquement des coef
+    conic_f.set_coef(cos(t)*conic_1.get_coef()/conic_1.get_norm() + sin(t)*conic_2.get_coef()/conic_2.get_norm());
 
+    //couleur
+    float r = (std::sin(t + 0) + 1) / 2; // Normaliser entre 0 et 1
+    float g = (std::sin(t + 2 * M_PI / 3) + 1) / 2; // Décalage pour le vert
+    float b = (std::sin(t + 4 * M_PI / 3) + 1) / 2;
 
-
+    
 
 
 

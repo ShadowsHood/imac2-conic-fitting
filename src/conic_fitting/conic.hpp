@@ -13,56 +13,38 @@ class Conic
         Eigen::MatrixXd m_matrix;
         // vector of a,b,c,d,e,f
         Eigen::VectorXd m_coef;
+
     public:
+        // Constructors and Destructors
         Conic();
         Conic(const std::vector<Eigen::Vector3d>& control_points);
+        Conic(const Conic & conic):
+            m_control_points(conic.m_control_points),
+            m_matrix(conic.m_matrix),
+            m_coef(conic.m_coef)
+        {};
         inline ~Conic(){};
 
-        inline void set_coef(Eigen::VectorXd v) { this->m_coef = v;}
+        // Getters and Setters
+            inline std::vector<Eigen::Vector3d> get_control_points() const { return this->m_control_points;}
             inline Eigen::VectorXd get_coef() const { return this->m_coef;}
-        inline void set_matrix(Eigen::MatrixXd v) { this->m_matrix = v;}
             inline Eigen::MatrixXd get_matrix() const { return this->m_matrix;}
+        void set_control_points(std::vector<Eigen::Vector3d> const& control_points);
+        inline void set_coef(Eigen::VectorXd const& coef){this->m_coef = coef;}; // utilisation pour le faisceau de conique
 
+        // Calculate
         void fill_matrix_from_control_points();
         void calculate_coef();
+        inline void update_props(){this->fill_matrix_from_control_points(); this->calculate_coef();};
+        double get_norm() const;
         
-        // double get_norm() const
-        // {
-        //     return std::pow(m_coef(0)*m_coef(0) + m_coef(1)*m_coef(1) + m_coef(2)*m_coef(2) + m_coef(3)*m_coef(3) + m_coef(4)*m_coef(4) + m_coef(5)*m_coef(5),0.5);
-        // }
+        // Displays
+        void display_props() const;
+        void display_control_points() const;
 
-        // Eigen::VectorXd get_coef(){ return this->m_coef;}
-        // std::vector<Eigen::Vector3d> get_point(){ return this->m_pointList;}
-        // Eigen::MatrixXd get_proj_matrix() {return this->A;}
-
-        // void set_point(std::vector<Eigen::Vector3d> & v)
-        // {
-        //     this->m_pointList = v;
-        // }
-
-        // void set_coef_precise(int const& indice, double & value)
-        // {
-        //     this->m_coef(indice) = value;
-        // }
-
-        // void set_coef(Eigen::VectorXd v)
-        // {
-        //     this->m_coef = v;
-        // }
-
-        // void display_conic() const{
-        //     std::cout << "Les coefs de votre conique sont : " << "\n";
-        //     std::cout << this->m_coef << "\n";
-        //     std::cout << "Voici votre matrice de projection : " << "\n";
-        //     std::cout << this->A << "\n";
-        // }
-
-        // void set_equation_from_matrix()
-        // {
-        //     Eigen::JacobiSVD<Eigen::MatrixXd> svd (this->A, Eigen::ComputeThinU|Eigen::ComputeFullV);
-        //     this->m_coef = svd.matrixV().rightCols(1);
-        // }
-
+        // Generate
+        void generate_random_control_points(double randomScale);
+        
         // void save_image(std::string name, double & epaisseur, float R = 1.0, float G = 1.0, float B = 1.0)
         // {
         //     sil::Image image{1000/*width*/, 1000/*height*/};
@@ -83,21 +65,6 @@ class Conic
 
         
         //     image.save(std::string{"src/Conic/output/"+ name + ".png"});
-        // }
-
-        // void conic_setup_random(double & randomScale)
-        // {
-
-        //     std::vector<Eigen::Vector3d> randomList{
-        //         Eigen::Vector3d{generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale)},
-        //         Eigen::Vector3d{generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale)},
-        //         Eigen::Vector3d{generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale)},
-        //         Eigen::Vector3d{generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale)},
-        //         Eigen::Vector3d{generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale),generateRandomDouble(-randomScale, randomScale)}
-        //     };
-        //     this->set_point(randomList);
-        //     this->create_proj_matrix();
-        //     this->set_equation_from_matrix();
         // }
 
 };
