@@ -15,8 +15,9 @@ int random_int(int min, int max)
 
 float random_float(float min, float max)
 {
-    std::uniform_real_distribution<float> distribution{min, max};
-    return distribution(generator());
+    // std::uniform_real_distribution<float> distribution{min, max};
+    // return distribution(generator());
+    return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
 }
 
 void set_random_seed(int seed)

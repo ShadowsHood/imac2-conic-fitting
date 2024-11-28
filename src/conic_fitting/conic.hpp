@@ -1,8 +1,13 @@
 #pragma once
 #include <iostream>
 #include <Eigen/Dense>
+#include <sil/sil.hpp>
 
 Eigen::VectorXd point_to_conic_equation(const Eigen::Vector3d & point);
+
+bool is_in_conic(const double x, const double y, const Eigen::VectorXd & coef, double const& thickness);
+
+void export_conic(const std::string& name, const double& thickness, const Eigen::VectorXd& conic_coef, const glm::vec3& color = {1.0,1.0,1.0});
 
 class Conic
 {
@@ -44,27 +49,4 @@ class Conic
 
         // Generate
         void generate_random_control_points(double randomScale);
-        
-        // void save_image(std::string name, double & epaisseur, float R = 1.0, float G = 1.0, float B = 1.0)
-        // {
-        //     sil::Image image{1000/*width*/, 1000/*height*/};
-
-        //     int const centerX{(image.width()-1)/2};
-        //     int const centerY{(image.height()-1)/2};
-
-        //     double scale = 100;
-
-        //     for(int x{0}; x<image.width(); x++){
-        //         for(int y{0}; y<image.height(); y++){
-        //             if(respect_conic((x-centerX)/scale,(y-centerY)/scale,this->m_coef, epaisseur))
-        //             {
-        //                 image.pixel(x, y) = glm::vec3{R,G,B};
-        //             } 
-        //         }
-        //     }
-
-        
-        //     image.save(std::string{"src/Conic/output/"+ name + ".png"});
-        // }
-
 };

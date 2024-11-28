@@ -1,4 +1,5 @@
 #include "conic.hpp"
+#include "random.hpp"
 
 Eigen::VectorXd point_to_conic_equation(const Eigen::Vector3d & point){
     Eigen::VectorXd eq(6);
@@ -9,6 +10,35 @@ Eigen::VectorXd point_to_conic_equation(const Eigen::Vector3d & point){
         point[1]*point[2],
         point[2]*point[2];
     return eq;
+}
+
+bool is_in_conic(const double x, const double y, const Eigen::VectorXd & coef, double const& thickness) {
+    return 
+        (coef[0]*x*x + coef[1]*x*y + coef[2]*y*y + coef[3]*x + coef[4]*y + coef[5] 
+            < thickness) 
+        && 
+        (coef[0]*x*x + coef[1]*x*y + coef[2]*y*y + coef[3]*x + coef[4]*y + coef[5] 
+            > -thickness);
+}
+
+void export_conic(const std::string& name, const double& thickness, const Eigen::VectorXd& conic_coef, const glm::vec3& color) {
+    sil::Image image{1000/*width*/, 1000/*height*/};
+
+    double const center_x{image.width()/2.0};
+    double const center_y{image.height()/2.0};
+
+    double scale = 100; //zoom
+
+    for(int x=0; x<image.width(); x++){
+        for(int y=0; y<image.height(); y++){
+            //poitionne le pixel hypotetiquement dans le repère de la conique pour le calcul
+            if(is_in_conic((x-center_x)/scale,(y-center_y)/scale, conic_coef, thickness)) image.pixel(x, y) = color;
+        }
+    }
+
+
+    image.save(std::string{"images/output/"+ name + ".png"});
+    image.save(std::string{"images/output/temp.png"});
 }
 
 // =================================================================================================
@@ -74,7 +104,13 @@ void Conic::display_control_points() const {
 
 void Conic::generate_random_control_points(double randomScale) {
     for (size_t i=0; i < m_control_points.size(); i++) {
-        m_control_points[i] = Eigen::Vector3d::Random() * randomScale;
+        // equivalent points => singular matrix => circle
+        // m_control_points[i] = Eigen::Vector3d::Random() * randomScale; 
+
+        //  random points no negative
+        // m_control_points[i] = Eigen::Vector3d{random_float(randomScale,2*randomScale),random_float(randomScale,2*randomScale),random_float(randomScale,2*randomScale)};
+        
+        m_control_points[i] = Eigen::Vector3d{random_float(-randomScale,randomScale),random_float(-randomScale,randomScale),random_float(-randomScale,randomScale)};
     }
     this->update_props();
 }
