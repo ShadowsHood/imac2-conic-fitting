@@ -64,7 +64,7 @@ void faisceau_conic(const double& thickness, const Conic& conic_1, const Conic& 
 
         t += M_PI/frames_total;
     }
-    image.save(std::string{"images/output/faisceau/faisceau.png"});
+    image.save(std::string{"images/output/conic/faisceau/faisceau.png"});
 }
 
 

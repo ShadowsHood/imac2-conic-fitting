@@ -37,8 +37,8 @@ void export_conic(const std::string& name, const double& thickness, const Eigen:
     }
 
 
-    image.save(std::string{"images/output/"+ name + ".png"});
-    image.save(std::string{"images/output/temp.png"});
+    image.save(std::string{"images/output/conic/"+ name + ".png"});
+    image.save(std::string{"images/output/conic/temp.png"});
 }
 
 // =================================================================================================
