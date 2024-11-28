@@ -47,5 +47,3 @@ function(add_exercise FOLDER)
 endfunction(add_exercise)
 
 add_exercise(conic_fitting)
-add_exercise(fractale)
-# add_exercise(rosace)
