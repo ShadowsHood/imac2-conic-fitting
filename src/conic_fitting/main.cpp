@@ -31,7 +31,7 @@ void test_conic_generation(const double& thickness) {
     }
 }
 
-void faisceau_conic(const double& thickness, const Conic& conic_1, const Conic& conic_2, const double& seconds=3.0, const double& fps=1/5.0) {
+void faisceau_conic(const double& thickness, const Conic& conic_1, const Conic& conic_2, const int& nb_frames=10) {
     // création image faisceau
     sil::Image image{1000/*width*/, 1000/*height*/};
     double const center_x {image.width()/2.0};
@@ -41,20 +41,19 @@ void faisceau_conic(const double& thickness, const Conic& conic_1, const Conic& 
     Conic conic_f;
 
     double t = 0; // temps
-    double frames_total = seconds/fps;
-    for (int frame=0; frame < frames_total; frame++) {
+    for (int frame=0; frame < nb_frames; frame++) {
 
         // ATTENTION pas de control_points ni de matrix d'eq, on se sert uniquement des coef
         conic_f.set_coef(cos(t)*conic_1.get_coef()/conic_1.get_norm() + sin(t)*conic_2.get_coef()/conic_2.get_norm());
 
         //couleur
-        float r = (std::sin(t + 0) + 1) / 2; // Normaliser entre 0 et 1
-        float g = (std::sin(t + 2 * M_PI / 3) + 1) / 2; // Décalage pour le vert
-        float b = (std::sin(t + 4 * M_PI / 3) + 1) / 2;
+        float r = (1+ std::sin(t)) /2; // 0 et 1
+        float g = (1+ std::sin(t+2*M_PI/3)) /2;
+        float b = (1+ std::sin(t+4*M_PI/3)) /2;
 
-        export_conic(std::string{"faisceau/state"}+std::to_string(frame), thickness, conic_f.get_coef(), {r,g,b});
+        export_conic(std::string{"faisceau/state/state"}+std::to_string(frame), thickness, conic_f.get_coef(), {r,g,b});
 
-        double scale = 100; //zoom
+        double scale = 75; //zoom
         // dessin du faisceau à l'instant t
         for(int x=0; x<image.width(); x++){
             for(int y=0; y<image.height(); y++){
@@ -62,7 +61,7 @@ void faisceau_conic(const double& thickness, const Conic& conic_1, const Conic& 
             }
         }
 
-        t += M_PI/frames_total;
+        t += M_PI/nb_frames;
     }
     image.save(std::string{"images/output/conic/faisceau/faisceau.png"});
 }
@@ -79,9 +78,9 @@ int main()
     conic_1.generate_random_control_points(100.0);
     export_conic(std::string{"conic1"}, visual_thickness, conic_1.get_coef());
     conic_2.generate_random_control_points(100.0);
-    export_conic(std::string{"conic2"}, visual_thickness, conic_1.get_coef());
+    export_conic(std::string{"conic2"}, visual_thickness, conic_2.get_coef());
 
-    // faisceau_conic(visual_thickness, conic_1, conic_2);
+    faisceau_conic(visual_thickness, conic_1, conic_2, 20);
 
     return 0;
 }
