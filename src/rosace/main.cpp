@@ -47,6 +47,6 @@ int main()
     }
     
 
-    image.save("output/pouet.png");
-    image.save("final/rosace.png");
+    image.save("images/output/pouet.png");
+    // image.save("images/final/rosace.png");
 }

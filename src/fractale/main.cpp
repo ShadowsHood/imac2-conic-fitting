@@ -114,6 +114,6 @@ int main()
 
 
 
-    image.save("output/pouet.png");
-    image.save("final/fractale.png");
+    image.save("images/output/pouet.png");
+    // image.save("images/final/fractale.png");
 }
