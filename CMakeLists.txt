@@ -21,7 +21,7 @@ function(add_exercise FOLDER)
         message(STATUS "  version " ${EIGEN3_VERSION_STRING})
         message(STATUS "  include " ${EIGEN3_INCLUDE_DIR})
     else()
-        set(EIGEN3_INCLUDE_DIR "./eigen-3.4.0")
+        set(EIGEN3_INCLUDE_DIR "../eigen-3.4.0")  #Path to the Eigen library
         message(STATUS "  include " ${EIGEN3_INCLUDE_DIR})
         #message(FATAL_ERROR "lib EIGEN3 not found")
     endif()
