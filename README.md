@@ -1,5 +1,5 @@
 # imac2-conic-fitting
-Projet : intersection plan avec conic (maths &amp; c++)
+Projet : représentation et intersection de conics (maths &amp; c++)
 
 Make sure to have eigen properly linked to your project before compiling
 
