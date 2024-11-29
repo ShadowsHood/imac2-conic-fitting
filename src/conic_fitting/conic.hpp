@@ -2,6 +2,7 @@
 #include <iostream>
 #include <Eigen/Dense>
 #include <sil/sil.hpp>
+#include <fstream>
 
 Eigen::VectorXd point_to_conic_equation(const Eigen::Vector3d & point);
 
@@ -49,4 +50,10 @@ class Conic
 
         // Generate
         void generate_random_control_points(double randomScale);
+
+        // Save & load control points
+        void save_points(const std::string &filename) const;
+
+        void load_points(const std::string &filename);
+
 };

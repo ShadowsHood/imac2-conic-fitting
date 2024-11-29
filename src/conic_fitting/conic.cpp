@@ -68,6 +68,7 @@ void Conic::set_control_points(std::vector<Eigen::Vector3d> const& control_point
 // Calculate
 
 void Conic::fill_matrix_from_control_points(){
+    m_matrix=Eigen::MatrixXd::Zero(m_control_points.size(),6);
     for (size_t i=0; i < m_control_points.size(); i++) {
         for (size_t j=0; j < m_coef.size(); j++) {
             m_matrix(i, j) = point_to_conic_equation(m_control_points[i])[j];
@@ -112,5 +113,48 @@ void Conic::generate_random_control_points(double randomScale) {
         
         m_control_points[i] = Eigen::Vector3d{random_float(-randomScale,randomScale),random_float(-randomScale,randomScale),random_float(-randomScale,randomScale)};
     }
+    this->update_props();
+}
+
+// =================================================================================================
+// Save & load control points
+
+void Conic::save_points(const std::string &filename) const {
+    std::ofstream outdata;
+    outdata.open(filename,std::fstream::out);
+    if( !outdata ) {
+        std::cerr << "Error: file could not be opened" << std::endl;
+        exit(0);
+    }
+    outdata << m_control_points.size() << std::endl;
+    for (size_t i = 0; i < m_control_points.size(); i++){
+        for (auto &&coord : m_control_points[i]){
+            outdata << coord << std::endl;
+        }
+    }
+    outdata.close();
+}
+
+void Conic::load_points(const std::string &filename) {
+
+    std::ifstream indata (filename);
+    if( !indata ) {
+        throw std::runtime_error("Error: file could not be opened: " + filename);
+    }
+
+    std::string size;
+    indata >> size;
+    int size_n = std::stoi(size);
+    m_control_points.clear();
+    m_control_points = std::vector<Eigen::Vector3d>(size_n);
+
+    if (size_n>0){
+        for (size_t i = 0; i < size_n*3; i++){
+            std::string number;
+            indata >> number;
+            m_control_points[i/3][i%3] = std::stod(number);
+        }
+    }
+    indata.close();
     this->update_props();
 }

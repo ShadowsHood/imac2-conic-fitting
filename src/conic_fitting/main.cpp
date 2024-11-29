@@ -19,9 +19,21 @@ void test_conic_generation(const double& thickness) {
             {5.0, 2.0, 1.0},
             {6.0, 12.0, 1.0}
         };
+        std::vector<Eigen::Vector3d> points2 = {
+            {3.0, 6.0, 1.0},
+            {1.0, 8.0, 1.0},
+            {12.0, 1.0, 1.0},
+            {4.0, 18.0, 1.0},
+            {20.0, 6.0, 1.0}
+        };
         Conic conic_0(points);
         conic_0.display_props();
+            conic_0.save_points("conic_0_test");
+        conic_0.set_control_points(points2);
+            conic_0.load_points("conic_0_test");
+        conic_0.display_props();
         // conic_0.display_control_points();
+
         export_conic(std::string{"conic_0"}, thickness, conic_0.get_coef());
 
     } catch (const std::exception& e) {
@@ -64,21 +76,43 @@ void faisceau_conic(const double& thickness, const Conic& conic_1, const Conic& 
     image.save(std::string{"images/output/conic/faisceau/faisceau.png"});
 }
 
+bool user_choice() {
+    char user_gen_choice;
+    std::cout << "Do you want to make the conics random (O) or load the preconfigured conics (n): ";
+    std::cin >> user_gen_choice;
+        if (std::tolower(user_gen_choice) != 'o' && std::tolower(user_gen_choice) != 'n') {
+        std::cerr << "Invalid input. Please enter '1' or '0'." << std::endl;
+        return 1;
+    }
+    return (std::tolower(user_gen_choice) == 'o');
+}
 
 int main() 
 {
     // faisceau exact trop précis donc on ajoute approximation pour affichage
     double visual_thickness(0.01);
 
-    test_conic_generation (visual_thickness);
+    // test_conic_generation (visual_thickness);
 
-    // Conic conic_1, conic_2;
-    // conic_1.generate_random_control_points(100.0);
-    // export_conic(std::string{"conic_1"}, visual_thickness, conic_1.get_coef());
-    // conic_2.generate_random_control_points(100.0);
-    // export_conic(std::string{"conic_2"}, visual_thickness, conic_2.get_coef());
+    Conic conic_1, conic_2;
 
-    // faisceau_conic(visual_thickness, conic_1, conic_2, 20);
+    bool rand_generation = user_choice();
+
+    if(rand_generation) {
+        conic_1.generate_random_control_points(100.0);
+            // conic_1.save_points("conic_1"); // sauvegarde des points de contrôle pour conic_1 pour les recharger après si besoin
+        conic_2.generate_random_control_points(100.0);
+            // conic_2.save_points("conic_2");
+    } else {
+        conic_1.load_points("conic_1");
+        conic_2.load_points("conic_2");
+    }   
+
+    export_conic(std::string{"conic_1"}, visual_thickness, conic_1.get_coef());
+    export_conic(std::string{"conic_2"}, visual_thickness, conic_2.get_coef());
+
+    faisceau_conic(visual_thickness, conic_1, conic_2, 20);
+    std::cout << "Faisceau de coniques généré" << std::endl;
 
     return 0;
 }
