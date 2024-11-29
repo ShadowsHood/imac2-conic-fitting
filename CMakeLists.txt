@@ -21,7 +21,7 @@ function(add_exercise FOLDER)
         message(STATUS "  version " ${EIGEN3_VERSION_STRING})
         message(STATUS "  include " ${EIGEN3_INCLUDE_DIR})
     else()
-        set(EIGEN3_INCLUDE_DIR "../eigen-3.4.0")  #Path to the Eigen library
+        set(EIGEN3_INCLUDE_DIR "C:/Users/elvin/Documents/IMAC/Projets/eigen-3.4.0")  #Path to the Eigen library
         message(STATUS "  include " ${EIGEN3_INCLUDE_DIR})
         #message(FATAL_ERROR "lib EIGEN3 not found")
     endif()
@@ -38,13 +38,14 @@ function(add_exercise FOLDER)
     target_sources(${FOLDER} PRIVATE ${SOURCES})
     target_include_directories(${FOLDER} PRIVATE src/${FOLDER} lib)
 
+    
 
-    # Link sil into the project
+    # lib include path
     target_link_libraries(${FOLDER} PRIVATE sil)
+    target_include_directories(${FOLDER} PRIVATE "${EIGEN3_INCLUDE_DIR}")
 
 endfunction(add_exercise)
 
-# add_exercise(conic_fitting)
-# add_exercise(kmeans)
-# add_exercise(fractale)
-# add_exercise(rosace)
+add_exercise(conic_fitting)
+add_exercise(fractale)
+add_exercise(rosace)

@@ -42,8 +42,17 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
-build/
 bin/
+.ninja_log
+.ninja_deps
+build.ninja
+.cmake 
+_deps
+cmake-build-debug/
+
+
 
 eigen-3.4.0/
 eigen-3.4.0/*
+
+state/
